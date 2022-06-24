@@ -12,25 +12,24 @@ fn main() -> anyhow::Result<()> {
     // or else some patches to the runtime implemented by esp-idf-sys might not link properly.
     esp_idf_sys::link_patches();
 
-    // let red = RGB8::new(255, 0, 0);
-    // let green = RGB8::new(0, 255, 0);
-    // let blue = RGB8::new(0, 0, 255);
-
     let mut rgb_led = WS2812RMT::new()?;
     loop {
-        for n in 0..(MAX + 256) {
+        for n in 0..MAX {
             let n = n as f64;
             let m = MAX as f64;
-            let a = (5.0 * PI * n) / (3.0 * m) + PI / 2.0;
-            // r = sin(a) * 256 + 128
-            let r = a.sin() * 256.0 + 128.0;
+            let scale = 192.0;
+            let shift = 96.0;
+            let a = (2.0 * PI * n) / m + PI / 2.0;
+            // r = sin(a) * scale + shift
+            let r = a.sin() * scale + shift;
             let r = r.clamp(0.0, 255.0) as u8;
-            // g = sin(a - 2π/3) * 256 + 128
-            let g = (a - 2.0 * PI / 3.0).sin() * 256.0 + 128.0;
+            // g = sin(a - 2π/3) * scale + shift
+            let g = (a - 2.0 * PI / 3.0).sin() * scale + shift;
             let g = g.clamp(0.0, 255.0) as u8;
-            // b = sin(a - 4π/3) * 256 + 128
-            let b = (a - 4.0 * PI / 3.0).sin() * 256.0 + 128.0;
+            // b = sin(a - 4π/3) * scale + shift
+            let b = (a - 4.0 * PI / 3.0).sin() * scale + shift;
             let b = b.clamp(0.0, 255.0) as u8;
+
             let color = RGB8 { r, g, b };
             rgb_led.set_pixel(color)?;
             println!("Color: {color}");

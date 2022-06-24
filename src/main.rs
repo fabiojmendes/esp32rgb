@@ -39,3 +39,16 @@ fn main() -> anyhow::Result<()> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::{color_gen, MAX};
+    use rgb::RGB8;
+
+    #[test]
+    fn test_red_color_gen() {
+        let c = color_gen(0.0, MAX as f64);
+        assert_eq!(c, RGB8 { r: 255, g: 0, b: 0 });
+    }
+}

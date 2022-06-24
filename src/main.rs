@@ -34,7 +34,7 @@ fn main() -> anyhow::Result<()> {
         for n in 0..MAX {
             let color = color_gen(n as f64, MAX as f64);
             rgb_led.set_pixel(color)?;
-            println!("Color: {color}");
+            println!("n: {n}, color: {color}");
             thread::sleep(Duration::from_millis(50));
         }
     }
